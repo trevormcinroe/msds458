@@ -24,6 +24,7 @@ For ADAM, the generally recommended hyperparameter values are as follows:
 * $`\beta_m`$ = 0.99
 * $`\beta_v`$ = 0.999
 * $`\epsilon`$ = 0.00001  
+* $`a^2+b^2=c^2`$
 
 The xor_problem.py script performs the training loop and outputs a graph of the loss function 
 to ```./week2/media/xor_loss.png```
