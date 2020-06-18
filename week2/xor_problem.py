@@ -2,11 +2,14 @@
 This is the main, runnable .py script for the xor-problem
 """
 
-from week2.nn import NN
-from week2.optimizer import ADAM
-from week2.loss import cross_entropy_loss
+from nn import NN
+from optimizer import ADAM
+from loss import cross_entropy_loss
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+
+savefig_location = os.path.join(os.path.dirname(__file__), 'media')
 
 train_samples = np.array([
     [0, 0],
@@ -47,4 +50,4 @@ plt.plot(historical_losses)
 plt.xlabel('Epoch')
 plt.ylabel('Cross-entropy loss')
 plt.title('Loss per training epoch')
-plt.savefig('./media/xor_loss.png', dpi=400)
+plt.savefig(savefig_location + '/xor_loss.png', dpi=400)
