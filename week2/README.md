@@ -21,8 +21,8 @@ For our XOR problem, please use an input size of 2 and output size of 2. You can
 units you would like.
 
 For ADAM, the generally recommended hyperparameter values are as follows:
-* ![](https://latex.codecogs.com/gif.latex?%5Calpha) = 0.01
-* ![](https://latex.codecogs.com/gif.latex?%5Cbeta_m) = 0.99
+* ![](https://latex.codecogs.com/png.latex?%5Calpha) = 0.01
+* ![](https://latex.codecogs.com/png.latex?%5Cbeta_m) = 0.99
 * ![](https://latex.codecogs.com/gif.latex?%5Cbeta_v) = 0.999
 * ![](https://latex.codecogs.com/gif.latex?%5Cepsilon) = 0.00001  
 
@@ -69,6 +69,7 @@ Finally, here is the loss function of the network after 100 epochs of training:
 
 You can find the code for this in the ```.get_gradient()``` method of the NN class.
 ![](https://latex.codecogs.com/gif.latex?%5Cdpi%7B150%7D%20%5Cbegin%7Balign*%7D%20%5Chat%7By%7D%20%26%3D%20softmax%28ReLU%28%5Cboldsymbol%7Bx%7D%5Cboldsymbol%7BW%7D_%7B0%7D%20&plus;%20%5Cboldsymbol%7Bb%7D_%7B0%7D%29%5Cboldsymbol%7BW%7D_%7B1%7D%20&plus;%20%5Cboldsymbol%7Bb%7D_%7B1%7D%29%20%5C%5C%20a_0%20%26%3D%20ReLU%28%5Cboldsymbol%7Bx%7D%5Cboldsymbol%7BW%7D_%7B0%7D%20&plus;%20%5Cboldsymbol%7Bb%7D_%7B0%7D%29%5C%5C%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_1%7D%20%26%3D%20%5Chat%7By%7D%20-%20y%20%5C%5C%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7BW%7D_1%7D%20%26%3D%20a_%7B0%7D%5E%7BT%7D%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_1%7D%5C%5C%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_0%7D%20%26%3D%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_1%7D%20%5Cboldsymbol%7BW%7D_%7B1%7D%5E%7BT%7D%5C%5C%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7BW%7D_0%7D%20%26%3D%20%5Cboldsymbol%7Bx%7D%5E%7BT%7D%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_0%7D%5C%5C%20%5Cend%7Balign*%7D)
+
 You will notice that the derivative of the softmax function simplifies to ![](https://latex.codecogs.com/gif.latex?%5Chat%7By%7D%20-%20y).
 This is one of the many nice properties of the softmax function. For the proof of this derivation, see:
 https://www.ics.uci.edu/~pjsadows/notes.pdf (Page 3, eqn's 17-27).
