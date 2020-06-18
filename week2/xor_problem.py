@@ -29,7 +29,7 @@ for _ in range(100):
     output = nn.forward_pass(input=train_samples)
     sm_output = nn.softmax(input=output)
     loss = cross_entropy_loss(y_pred=sm_output, y_actual=train_labels)
-    grad = nn.get_gradient(input=train_samples, loss=loss, y_pred=sm_output, y_actual=train_labels)
+    grad = nn.get_gradient(input=train_samples, y_pred=sm_output, y_actual=train_labels)
     ADAM.update_weights(weights=nn.weights, gradient=grad)
     historical_losses.append(loss)
 

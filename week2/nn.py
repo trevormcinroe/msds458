@@ -126,7 +126,7 @@ class NN:
         y_pred[range(y_pred.shape[0]), y_actual] -= 1
         return y_pred / y_pred.shape[0]
 
-    def get_gradient(self, input, loss, y_pred, y_actual):
+    def get_gradient(self, input, y_pred, y_actual):
         """"""
         # Pulling out the necessary non-activation-function outputs of each layer
         # Z_0, Z_1 = self.forward_pass(input=input, partial=True)
