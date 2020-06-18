@@ -50,7 +50,7 @@ This directory contains a from-scratch implementation of:
 
 
 ## Using the network
-The NN class has been inplemented to allow for a customer input size, output size, and number of hidden units.
+The NN class has been inplemented to allow for a custom input size, output size, and number of hidden units.
 For our XOR problem, please use an input size of 2 and output size of 2. You can use whatever number of hidden
 units you would like.
 
@@ -60,7 +60,7 @@ For ADAM, the generally recommended hyperparameter values are as follows:
 * ![](https://latex.codecogs.com/gif.latex?%5Cbeta_v) = 0.999
 * ![](https://latex.codecogs.com/gif.latex?%5Cepsilon) = 0.00001  
 
-The xor_problem.py script performs the training loop and outputs a graph of the loss function 
+The `xor_problem.py` script performs the training loop and outputs a graph of the loss function 
 to ```./week2/media/xor_loss.png```
 
 The below code snippet shows the initialization of the NN class with an input vector of size 2, 
