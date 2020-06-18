@@ -20,7 +20,7 @@ For our XOR problem, please use an input size of 2 and output size of 2. You can
 units you would like.
 
 For ADAM, the generally recommended hyperparameter values are as follows:
-* $`\alpha`$ = 0.01
+* ![](https://latex.codecogs.com/gif.latex?%5Calpha) = 0.01
 * $`\beta_m`$ = 0.99
 * $`\beta_v`$ = 0.999
 * $`\epsilon`$ = 0.00001  
