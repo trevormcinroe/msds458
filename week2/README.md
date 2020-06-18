@@ -58,12 +58,17 @@ for _ in range(100):
     ADAM.update_weights(weights=nn.weights, gradient=grad)
 ```
 
+Finally, here is the loss function of the network after 100 epochs of training:
+<p align="center">
+  <img width="150" src="media/xor_loss.png">
+  </a>
+</p>
+
 ### Derivation of the backprop algorithm
 (Hopefully this renders well. Github doesn't support rendering LaTeX natively.)
 
 You can find the code for this in the ```.get_gradient()``` method of the NN class.
-![](https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20%5Chat%7By%7D%20%26%3D%20softmax%28ReLU%28%5Cboldsymbol%7Bx%7D%5Cboldsymbol%7BW%7D_%7B0%7D%20&plus;%20%5Cboldsymbol%7Bb%7D_%7B0%7D%29%5Cboldsymbol%7BW%7D_%7B1%7D%20&plus;%20%5Cboldsymbol%7Bb%7D_%7B1%7D%29%20%5C%5C%20a_0%20%26%3D%20ReLU%28%5Cboldsymbol%7Bx%7D%5Cboldsymbol%7BW%7D_%7B0%7D%20&plus;%20%5Cboldsymbol%7Bb%7D_%7B0%7D%29%5C%5C%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_1%7D%20%26%3D%20%5Chat%7By%7D%20-%20y%20%5C%5C%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7BW%7D_1%7D%20%26%3D%20a_%7B0%7D%5E%7BT%7D%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_1%7D%5C%5C%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_0%7D%20%26%3D%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_1%7D%20%5Cboldsymbol%7BW%7D_%7B1%7D%5E%7BT%7D%5C%5C%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7BW%7D_0%7D%20%26%3D%20%5Cboldsymbol%7Bx%7D%5E%7BT%7D%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_0%7D%5C%5C%20%5Cend%7Balign*%7D)
-
+![scale=0.5](https://latex.codecogs.com/gif.latex?%5Cdpi%7B300%7D%20%5Cbegin%7Balign*%7D%20%5Chat%7By%7D%20%26%3D%20softmax%28ReLU%28%5Cboldsymbol%7Bx%7D%5Cboldsymbol%7BW%7D_%7B0%7D%20&plus;%20%5Cboldsymbol%7Bb%7D_%7B0%7D%29%5Cboldsymbol%7BW%7D_%7B1%7D%20&plus;%20%5Cboldsymbol%7Bb%7D_%7B1%7D%29%20%5C%5C%20a_0%20%26%3D%20ReLU%28%5Cboldsymbol%7Bx%7D%5Cboldsymbol%7BW%7D_%7B0%7D%20&plus;%20%5Cboldsymbol%7Bb%7D_%7B0%7D%29%5C%5C%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_1%7D%20%26%3D%20%5Chat%7By%7D%20-%20y%20%5C%5C%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7BW%7D_1%7D%20%26%3D%20a_%7B0%7D%5E%7BT%7D%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_1%7D%5C%5C%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_0%7D%20%26%3D%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_1%7D%20%5Cboldsymbol%7BW%7D_%7B1%7D%5E%7BT%7D%5C%5C%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7BW%7D_0%7D%20%26%3D%20%5Cboldsymbol%7Bx%7D%5E%7BT%7D%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_0%7D%5C%5C%20%5Cend%7Balign*%7D)
 You will notice that the derivative of the softmax function simplifies to ![](https://latex.codecogs.com/gif.latex?%5Chat%7By%7D%20-%20y).
 This is one of the many nice properties of the softmax function. For the proof of this derivation, see:
 https://www.ics.uci.edu/~pjsadows/notes.pdf (Page 3, eqn's 17-27).
