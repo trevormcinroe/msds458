@@ -8,6 +8,7 @@ This directory contains a from-scratch implementation of:
     * week2/nn.py
 * ADAM optimizer
     * week2/optimizer.py
+    * Based on: https://arxiv.org/abs/1412.6980
 * Backpropagation
     * week2/nn.get_gradient() + week2/optimizer.update_weights()
 * Cross entropy loss
@@ -28,7 +29,7 @@ For ADAM, the generally recommended hyperparameter values are as follows:
 The xor_problem.py script performs the training loop and outputs a graph of the loss function 
 to ```./week2/media/xor_loss.png```
 
-The below code shows the initialization of the NN class with an input vector of size 2, (![](\boldsymbol{x} \in \mathbb{R}^2)),
+The below code shows the initialization of the NN class with an input vector of size 2, ![](https://latex.codecogs.com/gif.latex?%5Cboldsymbol%7Bx%7D%20%5Cin%20%5Cmathbb%7BR%7D%5E2),
 10 hidden units, and producing 2 outputs per example in the batch. This results in the softmax function producing a
 predicted probability for each class for each example. Finally, the NN class is given the seed 111 for 
 reproducability.
@@ -60,7 +61,7 @@ for _ in range(100):
 ### Derivation of the backprop algorithm
 (Hopefully this renders well. Github doesn't support rendering LaTeX natively.)
 
-You can find the code for this in the $.get_gradient()$ method of the NN class.
+You can find the code for this in the ```.get_gradient()``` method of the NN class.
 ![](https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20%5Chat%7By%7D%20%26%3D%20softmax%28ReLU%28%5Cboldsymbol%7Bx%7D%5Cboldsymbol%7BW%7D_%7B0%7D%20&plus;%20%5Cboldsymbol%7Bb%7D_%7B0%7D%29%5Cboldsymbol%7BW%7D_%7B1%7D%20&plus;%20%5Cboldsymbol%7Bb%7D_%7B1%7D%29%20%5C%5C%20a_0%20%26%3D%20ReLU%28%5Cboldsymbol%7Bx%7D%5Cboldsymbol%7BW%7D_%7B0%7D%20&plus;%20%5Cboldsymbol%7Bb%7D_%7B0%7D%29%5C%5C%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_1%7D%20%26%3D%20%5Chat%7By%7D%20-%20y%20%5C%5C%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7BW%7D_1%7D%20%26%3D%20a_%7B0%7D%5E%7BT%7D%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_1%7D%5C%5C%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_0%7D%20%26%3D%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_1%7D%20%5Cboldsymbol%7BW%7D_%7B1%7D%5E%7BT%7D%5C%5C%20%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7BW%7D_0%7D%20%26%3D%20%5Cboldsymbol%7Bx%7D%5E%7BT%7D%5Cfrac%7B%5Cpartial%20L%7D%7B%5Cpartial%20%5Cboldsymbol%7Bb%7D_0%7D%5C%5C%20%5Cend%7Balign*%7D)
 
 You will notice that the derivative of the softmax function simplifies to ![](https://latex.codecogs.com/gif.latex?%5Chat%7By%7D%20-%20y).

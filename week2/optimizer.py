@@ -5,7 +5,6 @@ It keeps running estimates of the mean and second moment of the updates, denoted
 m_t = B_m * m_t-1 + (1 - B_m)g1_t
 v_t = B_v * v_t-1 + (1 - B_v)g^2_t
 
-
 B_m, B_v are fixed parameters
 The g's are the gradients
 Given that m, v are init to 0, they are biased towards 0. To get unbiased estimates,
@@ -17,16 +16,22 @@ NOTE: in the above calculations, the beta parameters are raised to the power of 
 
 Using the above, the weight updates are ultimately...
 w_t = w_t-1 + (alpha / sqrt(\hat{v_t} + epsilon)) * \hat{m_t}
-
-alpha is the usual step size parameter
-epsilon is some small number that is meant to stabilize the denom to not be 0
 """
 
 import numpy as np
 
 
 class ADAM:
+    """
+    This is a bare-bones implementation of the ADAM optimizer based on Kingma, Ba (2014) https://arxiv.org/abs/1412.6980
 
+    Attributes:
+        layer_dims (list): should be directly passed from the NN.layer_dims attribute to ensure compatibility
+        alpha (float): the step-size (learning rate)
+        beta_m (float): the coefficient for the "momentum" hyperparameter
+        beta_v (float): the coefficient for the "velocity" hyperparameter
+        epsilon (float): a very small value, meant to be a stabilizer for when v_hat may be 0
+    """
     def __init__(self, layer_dims, alpha, beta_m, beta_v, epsilon):
         self.layer_dims = layer_dims
         self.alpha = alpha
@@ -48,14 +53,16 @@ class ADAM:
         self.beta_v_exp = self.beta_v
 
     def update_weights(self, weights, gradient):
-        """
+        """The completion of the backpropagation algorithm, applying both the momentum and the gradient to the weights.
+        In addition, this method handles the updating of all hyperparameters.
 
         Args:
-            weights (array of dicts): the weight dicts from the network class
-            gradient (array of dicts): in our case, this will be the TD-error * gradient
+            weights (array of dicts): the weight dicts from the network class, use a DIRECT REFERENCE! NOT A COPY!
+            gradient (array of dicts): the array of dicts returned by the NN.get_gradient() method
 
         Returns:
-            updated weights dicts
+            None. the network's weights are mutable, so this method will actually be mutating the weights of the
+            network directly, assuming a direct reference to them was passed to the "weights" argument
         """
 
         for i in range(len(weights)):
@@ -68,10 +75,5 @@ class ADAM:
 
                 weights[i][param] = weights[i][param] - self.alpha / (np.sqrt(v_hat) + self.epsilon) * m_hat
 
-        # Now we need to take care of our exponentially increasing beta's
         self.beta_m_exp *= self.beta_m
         self.beta_v_exp *= self.beta_v
-
-        return weights
-
-

@@ -3,12 +3,12 @@ Contains the NN class, meant to be used as a single-hidden-layer dense neural ne
 """
 
 import numpy as np
-from copy import deepcopy
 
 
 class NN:
     """
     This is meant to be used as a single-hidden-layer neural network.
+    Uses a ReLU activation function after the first layer and a softmax output.
     
     Attributes:
         User inputted:
@@ -24,7 +24,6 @@ class NN:
 
     """
     def __init__(self, input_length, n_hidden_units, n_outputs, seed):
-        """"""
 
         self.input_length = input_length
         self.n_hidden_units = n_hidden_units
@@ -34,18 +33,19 @@ class NN:
         self.random_generator = np.random.RandomState(seed)
 
         self.layer_dims = [self.input_length, self.n_hidden_units, self.n_outputs]
-        self.weights = [dict() for i in range(len(self.layer_dims) - 1)]
+        self.weights = [dict() for _ in range(len(self.layer_dims) - 1)]
         for i in range(0, len(self.layer_dims) - 1):
             self.weights[i]['W'] = self._init_saxe(rows=self.layer_dims[i], cols=self.layer_dims[i + 1])
             self.weights[i]['b'] = self._init_saxe(rows=1, cols=self.layer_dims[i + 1])
 
     def _init_saxe(self, rows, cols):
-        """
+        """Saxe weight initialization as based on Saxe et al. (2013) https://arxiv.org/pdf/1312.6120.pdf
+
         Args:
             rows (int): number of input units for layer.
             cols (int): number of output units for layer.
         Returns:
-            np.array consisting of weights for the layer based on the initialization in Saxe et al.
+            np.array of initialized weights
         """
         tensor = self.random_generator.normal(0, 1, (rows, cols))
         if rows < cols:
@@ -67,7 +67,7 @@ class NN:
             partial (bool): used to pull out relevant information during the gradient calculation step
 
         Returns:
-            the q-values, np.array(a1, a2, a3)
+            np.array of predicted values [batch_size, n_outputs]
         """
         W_0 = self.weights[0]['W']
         b_0 = self.weights[0]['b']
@@ -77,29 +77,15 @@ class NN:
         W_1 = self.weights[1]['W']
         b_1 = self.weights[1]['b']
 
-        # Z_0, Z_1
+        # During gradient calculations, we only need the activated-output of the first layer
         if partial:
-            # return np.dot(input, W_0) + b_0, np.dot(phi, W_1) + b_1
             return phi
 
         else:
             return np.dot(phi, W_1) + b_1
 
-    def get_weights(self):
-        """
-        Returns:
-            A copy of the current weights of this network.
-        """
-        return deepcopy(self.weights)
-
-    def set_weights(self, weights):
-        """
-        Args:
-            weights (list of dictionaries): Consists of weights that this network will set as its own weights.
-        """
-        self.weights = deepcopy(weights)
-
-    def softmax(self, input):
+    @staticmethod
+    def softmax(input):
         """Computes the softmax transformation from the output of the forward pass of the network. This is the version
         of softmax that is numerically stable. That is, it is not prone to either underflow or overflow.
 
@@ -113,37 +99,43 @@ class NN:
         denominator = np.sum(numerator, axis=1).reshape((-1, 1))
         return (numerator / denominator).squeeze()
 
-    def softmax_grad(self, y_pred, y_actual):
-        """
+    @staticmethod
+    def softmax_grad(y_pred, y_actual):
+        """Handles the computation of the derivative of our softmax output.
 
         Args:
-            y_pred:
-            y_actual:
+            y_pred (np.array, 2D): [batch_size, n_outputs]
+            y_actual (np.array, 1D): [batch_size,]
 
         Returns:
-
+            np.array, 2D - the gradient
         """
         y_pred[range(y_pred.shape[0]), y_actual] -= 1
         return y_pred / y_pred.shape[0]
 
     def get_gradient(self, input, y_pred, y_actual):
-        """"""
-        # Pulling out the necessary non-activation-function outputs of each layer
-        # Z_0, Z_1 = self.forward_pass(input=input, partial=True)
+        """Look at that, the network can compute its own gradients!
+
+        Args:
+            input (np.array): our training examples [batch_size, n_outputs]
+            y_pred (np.array): the predicted values (POST SOFTMAX) [batch_size, n_outputs)
+            y_actual (np.array): the ground-truth labels [batch_size,]
+
+        Returns:
+            a list of dictionaries with the same structure as the self.weights attribute
+        """
+        # For an explanation of what is going on, please see the "Derivation of the backprop algorithm" section of
+        # the README.
         relu_output = self.forward_pass(input=input, partial=True)
 
-        # dL_dsoftmax
         dL_dsoftmax = self.softmax_grad(y_pred=y_pred, y_actual=y_actual)
 
         grad = [dict() for i in range(len(self.weights))]
 
-        # The gradient of our biases in the output layer is simply equal to our loss
         dL_db_1 = dL_dsoftmax
 
-        # For the weights in the 2nd layer, deriv of activation in that layer (ReLU).T @ loss
         dL_dW_1 = np.dot(relu_output.T, dL_dsoftmax)
 
-        # Moving back one layer, let's now do the gradient of the 1st layer's biases which is loss @ W1.T
         dL_db_0 = np.dot(dL_db_1, self.weights[1]['W'].T)
 
         dL_dW_0 = np.dot(input.T, dL_db_0)
@@ -154,66 +146,3 @@ class NN:
         grad[1]['b'] = dL_db_1
 
         return grad
-
-
-    # #
-    # def get_gradient(self, input, error):
-    #     """"""
-    #     grads = [dict() for i in range(len(self.weights))]
-    #
-    #     W_0, b_0 = self.weights[0]['W'], self.weights[0]['b']
-    #     W1, b1 = self.weights[1]['W'], self.weights[1]['b']
-    #
-    #     phi = np.maximum(0, np.dot(input, W_0) + b_0)
-    #
-    #     dv_db_1 = 1
-    #     dv_dw_1 = phi.T
-    #     print(phi)
-    #     I = np.ones((phi.shape[0], phi.shape[1]))
-    #     I[phi <= 0] = 0
-    #     print(I)
-    #     print(self.weights[1]['W'])
-    #     dv_db_0 = self.weights[1]['W'].T * I
-    #     print(dv_db_0)
-    #     assert(1 == 0)
-    #
-    #     delta_v_delta_b1 = 1
-    #     delta_v_delta_W1 = phi.T
-    #
-    #
-    #     # Gradient of the ReLU activation function
-    #     I = np.ones((delta_v_delta_W1.shape[0], delta_v_delta_W1.shape[1]))
-    #     I[delta_v_delta_W1 < 0] = 0
-    #
-    #     delta_v_delta_b0 = self.weights[1]['W'].T * I
-    #     delta_v_delta_W0 = np.dot(input.T, delta_v_delta_b0)
-    #
-    #     grads[0]['W'] = delta_v_delta_W0 * error
-    #     grads[0]['b'] = delta_v_delta_b0 * error
-    #     grads[1]['b'] = delta_v_delta_b1 * error
-    #     grads[1]['W'] = delta_v_delta_W1 * error
-    #
-    #     return grads
-    #
-    # # def get_gradient(self, forward_pass_output, y_actual):
-    # #     """"""
-    # #
-    # #     # Initial expected values...
-    # #     expected = np.zeros((y_actual.shape[0], forward_pass_output.shape[1]))
-    # #     expected[range(y_actual.shape[0], y_actual)] = 1
-    # #
-    # #     # Working backwards from the end of the network...
-    # #     # (0) Softmax
-    # #     softmax_gradient = forward_pass_output[range(y_actual.shape[0]), y_actual]
-    # #     softmax_gradient -= 1
-    # #     softmax_gradient = softmax_gradient / y_actual.shape[0]
-    # #
-    # #     error = (expected - forward_pass_output) * softmax_gradient
-    #
-    #
-
-
-
-
-
-

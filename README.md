@@ -4,22 +4,14 @@
 </p>
 
 ## Introduction
-Contains all code relevant to Northwestern's MSDS-458 class
+Contains all of my code that is relevant to Northwestern's MSDS-458 class, Artificial Intelligence and Deep Learning
 
 ## Directory
+The main contents of this repo are as follows:
 ```
 project
-│   README.md  
 └─── week2
 │   │   nn.py 
-│   │   file012.txt
-│   │
-│   └───subfolder1
-│       │   file111.txt
-│       │   file112.txt
-│       │   ...
-│   
-└───folder2
-    │   file021.txt
-    │   file022.txt
-```
+│   │   loss.py
+|   |   optimizer.py
+|   |   xor_problem.py

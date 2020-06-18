@@ -35,7 +35,12 @@ for _ in range(100):
 
 # Our final prediction...
 y_pred = nn.softmax(nn.forward_pass(input=train_samples))
-print(np.argmax(y_pred, axis=1))
+print(f'Trained network predictions: {np.argmax(y_pred, axis=1)}')
+print(f'Ground-truth values: {train_labels}')
+if np.array_equal(np.argmax(y_pred, axis=1), train_labels):
+    print('Congrats, your network has solved the XOR problem!')
+else:
+    print('Looks like your network is not quite there... Try more epochs.')
 
 # Converting the historical_loss list into a plot...
 plt.plot(historical_losses)
