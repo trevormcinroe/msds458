@@ -110,3 +110,27 @@ You can find the code for this in the ```.get_gradient()``` method of the NN cla
 
 You will notice that the derivative of the softmax function simplifies to ![](https://latex.codecogs.com/gif.latex?%5Chat%7By%7D%20-%20y).
 This is one of the many nice properties of the softmax function. For the proof of this derivation, see [this source](https://www.ics.uci.edu/~pjsadows/notes.pdf) (Page 3, eqn's 17-27).
+
+This gradient is then packed into a tensor, ![](https://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Cmathcal%7BG%7D), and passed to our ADAM algorithm as:
+
+![](https://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Cbegin%7Balign*%7D%20m_%7Bt%7D%5E%7B%28p%2C%5Cell%29%7D%20%5Cleftarrow%20%5Cbeta_%7Bm%7D%20m_%7Bt-1%7D%5E%7B%28p%2C%5Cell%29%7D%20%26&plus;%20%281%20-%20%5Cbeta_%7Bm%7D%29%20%5Cmathcal%7BG%7D_%7Bt%7D%5E%7B%28p%2C%5Cell%29%7D%20%5C%5C%20v_%7Bt%7D%5E%7B%28p%2C%5Cell%29%7D%20%5Cleftarrow%20%5Cbeta_%7Bv%7D%20v_%7Bt-1%7D%5E%7B%28p%2C%5Cell%29%7D%20%26&plus;%20%281%20-%20%5Cbeta_%7Bv%7D%29%20%5Cmathcal%7BG%7D_%7Bt%7D%5E%7B2%2C%20%28p%2C%5Cell%29%7D%20%5C%5C%20%5Chat%7Bm%7D_%7Bt%7D%5E%7B%28p%2C%5Cell%29%7D%20%5Cleftarrow%20m_%7Bt%7D%5E%7B%28p%2C%5Cell%29%7D%20%26/%20%281%20-%20%5Cbeta_%7Bm%7D%5E%7Bt%7D%29%20%5C%5C%20%5Chat%7Bv%7D_%7Bt%7D%5E%7B%28p%2C%5Cell%29%7D%20%5Cleftarrow%20v_%7Bt%7D%5E%7B%28p%2C%5Cell%29%7D%20%26/%20%281%20-%20%5Cbeta_%7Bv%7D%5E%7Bt%7D%29%20%5C%5C%20%5Cboldsymbol%7B%5Ctheta%7D%5E%7B%28p%2C%5Cell%29%7D_%7Bt%7D%20%5Cleftarrow%20%5Cboldsymbol%7B%5Ctheta%7D%5E%7B%28p%2C%5Cell%29%7D_%7Bt-1%7D%20-%20%26%5Calpha%5Cfrac%7B%5Chat%7Bm%7D_%7Bt%7D%5E%7B%28p%2C%5Cell%29%7D%7D%7B%5Csqrt%7B%5Chat%7Bv%7D_%7Bt%7D%5E%7B%28p%2C%5Cell%29%7D%7D%20&plus;%20%5Cepsilon%7D%20%5Cend%7Balign*%7D)
+
+Where ![](https://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Calpha) 
+is our learning rate, 
+![](https://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Cepsilon)
+is a small stability value, 
+![](https://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Cbeta_%7Bv%7D)
+is our velocity coefficient, 
+![](https://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Cbeta_%7Bm%7D)
+is our momentum coefficient, 
+![](https://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20m_%7Bt%7D%5E%7B%28p%2C%5Cell%29%7D)
+is our momentum matrix, 
+![](https://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20v_%7Bt%7D%5E%7B%28p%2C%5Cell%29%7D)
+is our velocity matrix, 
+![](https://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Cboldsymbol%7B%5Ctheta%7D_%7Bt%7D%5E%7B%28p%2C%5Cell%29%7D)
+are the network's learnable parameters, and 
+![](https://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Cmathcal%7BG%7D_%7Bt%7D%5E%7B%28p%2C%5Cell%29%7D)
+is the gradient matrix for parameter 
+![](https://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20p) (weights or biases) for layer 
+![](https://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20%5Cell), at step 
+![](https://latex.codecogs.com/png.latex?%5Cdpi%7B120%7D%20t).
