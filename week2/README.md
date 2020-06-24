@@ -100,10 +100,10 @@ Line 26 takes the network's weights and the gradient and updates the weights of 
 2   adam = ADAM(layer_dims=nn.layer_dims, alpha=0.01, beta_m=0.99, beta_v=0.999, epsilon=0.00001)
 3   mb = MiniBatcher(data=train_samples, labels=train_labels, batch_size=4, seed=111)
 4
-5   # Running our training loop for 100 epochs with the entirety of our training data at each batch
+5   # Running our training loop for 300 epochs with the entirety of our training data at each batch
 6   # We'll also be keeping track of our loss at each step...
 7   historical_losses = list()
-8   EPOCHS = 150
+8   EPOCHS = 300
 9   epoch_counter = 0
 10
 11  while epoch_counter < EPOCHS:

@@ -26,7 +26,7 @@ nn = NN(input_length=2, n_hidden_units=10, n_outputs=2, seed=1111)
 adam = ADAM(layer_dims=nn.layer_dims, alpha=0.01, beta_m=0.99, beta_v=0.999, epsilon=0.00001)
 mb = MiniBatcher(data=train_samples, labels=train_labels, batch_size=4, seed=111)
 
-# Running our training loop for 100 epochs with the entirety of our training data at each batch
+# Running our training loop for 300 epochs with the entirety of our training data at each batch
 # We'll also be keeping track of our loss at each step...
 historical_losses = list()
 
