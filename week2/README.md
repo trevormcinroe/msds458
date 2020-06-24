@@ -111,6 +111,14 @@ Note that my network input uses matrices that have features in the columns. More
 You can find the code for this in the ```.get_gradient()``` method of the NN class.
 ![](https://latex.codecogs.com/png.latex?%5Cdpi%7B150%7D%20%5Cbegin%7Balign*%7D%20%5Chat%7By%7D%20%3D%20softmax%28ReLU%28X%20%26%20W%5E%7B%5B0%5D%7D%20&plus;%20b%5E%7B%5B0%5D%7D%29W%5E%7B%5B1%5D%7D%20&plus;%20b%5E%7B%5B1%5D%7D%29%20%5C%5C%20z%5E%7B%5B%5Cell%5D%7D%20%3D%20a%5E%7B%5B%5Cell-1%5D%7D%20%26%20W%5E%7B%5B%5Cell%5D%7D%20&plus;%20b%5E%7B%5B%5Cell%5D%7D%20%5C%5C%20a%5E%7B%5B%5Cell%5D%7D%20%3D%20%26g%5E%7B%5B%5Cell%5D%7D%20%28z%5E%7B%5B%5Cell%5D%7D%29%20%5C%5C%20%5Cdelta%5E%7B%5Boutput%5D%7D%20%3D%20%5Cnabla_%7Boutput%7D%20%26%20%5Cmathcal%7BL%7D%28%5Chat%7By%7D%2Cy%29%20%3D%20%5Chat%7By%7D%20-%20y%5C%5C%20%5Cdelta%5E%7B%5B%5Cell%5D%7D%20%3D%20%28%5Cdelta%5E%7B%5B%5Cell&plus;1%5D%7D%20%26%20W%5E%7B%5B%5Cell&plus;1%5D%5Cintercal%7D%29%20%5Codot%20g%5E%7B%5Cprime%5B%5Cell%5D%7D%28z%5E%7B%5B%5Cell%5D%7D%29%5C%5C%20%5Cnabla_%7Bb%5E%7B%5B%5Cell%5D%7D%7D%20%26%3D%20%5Cdelta%5E%7B%5B%5Cell%5D%7D%5C%5C%20%5Cnabla_%7BW%5E%7B%5B%5Cell%5D%7D%7D%20%3D%20%26a%5E%7B%5B%5Cell-1%5D%5Cintercal%7D%20%5Cdelta%5E%7B%5B%5Cell%5D%7D%20%5Cend%7Balign*%7D)
 
+where where ![](https://latex.codecogs.com/png.latex?g%5E%7B%5B%5Cell%5D%7D) 
+is the activation function of layer 
+![](https://latex.codecogs.com/png.latex?%5Cell), 
+![](https://latex.codecogs.com/png.latex?a%5E%7B%5B%5Cell-1%5D%7D)
+for the input layer is our mini-batch of data 
+![](https://latex.codecogs.com/png.latex?X), and 
+![](https://latex.codecogs.com/png.latex?%5Codot)
+denotes the elementwise product.
 You will notice that the derivative of the softmax function simplifies to ![](https://latex.codecogs.com/gif.latex?%5Chat%7By%7D%20-%20y).
 This is one of the many nice properties of the softmax function. For the proof of this derivation, see [this source](https://www.ics.uci.edu/~pjsadows/notes.pdf) (Page 3, eqn's 17-27).
 
