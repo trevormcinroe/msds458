@@ -79,7 +79,7 @@ class NN:
 
         # During gradient calculations, we only need the activated-output of the first layer
         if partial:
-            return phi
+            return phi, np.dot(input, W_0) + b_0
 
         else:
             return np.dot(phi, W_1) + b_1
@@ -126,19 +126,22 @@ class NN:
         """
         # For an explanation of what is going on, please see the "Derivation of the backprop algorithm" section of
         # the README.
-        relu_output = self.forward_pass(input=input, partial=True)
+        relu_output, non_activation = self.forward_pass(input=input, partial=True)
 
         dL_dsoftmax = self.softmax_grad(y_pred=y_pred, y_actual=y_actual)
 
         grad = [dict() for i in range(len(self.weights))]
 
-        dL_db_1 = dL_dsoftmax
+        dL_db_1 = np.sum(dL_dsoftmax, axis=0, keepdims=True) / input.shape[0]
 
-        dL_dW_1 = np.dot(relu_output.T, dL_dsoftmax)
+        dL_dW_1 = np.dot(relu_output.T, dL_dsoftmax) / input.shape[0]
 
-        dL_db_0 = np.dot(dL_db_1, self.weights[1]['W'].T)
+        # gradient in layer ahead * weights in layer ahead.T * deriv of ReLU
+        dx = (non_activation > 0).astype(float)
+        dL_db_0 = np.sum(np.dot(dL_dsoftmax, self.weights[1]['W'].T) * dx, axis=0, keepdims=True)
 
-        dL_dW_0 = np.dot(input.T, dL_db_0)
+        # gradient in layer ahead * input data
+        dL_dW_0 = np.dot(input.T, np.dot(dL_dsoftmax, self.weights[1]['W'].T) * dx)
 
         grad[0]['W'] = dL_dW_0
         grad[0]['b'] = dL_db_0

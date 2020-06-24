@@ -64,7 +64,6 @@ class ADAM:
             None. the network's weights are mutable, so this method will actually be mutating the weights of the
             network directly, assuming a direct reference to them was passed to the "weights" argument
         """
-
         for i in range(len(weights)):
             for param in weights[i].keys():
                 self.m[i][param] = self.beta_m * self.m[i][param] + (1 - self.beta_m) * gradient[i][param]

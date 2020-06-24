@@ -21,14 +21,14 @@ train_samples = np.array([
 train_labels = np.array([0, 1, 1, 0])
 
 # Initializing our neural networl and ADAM classes
-nn = NN(input_length=2, n_hidden_units=10, n_outputs=2, seed=111)
+nn = NN(input_length=2, n_hidden_units=10, n_outputs=2, seed=1111)
 adam = ADAM(layer_dims=nn.layer_dims, alpha=0.01, beta_m=0.99, beta_v=0.999, epsilon=0.00001)
 
 # Running our training loop for 100 epochs with the entirety of our training data at each batch
 # We'll also be keeping track of our loss at each step...
 historical_losses = list()
 
-for _ in range(100):
+for _ in range(300):
     output = nn.forward_pass(input=train_samples)
     sm_output = nn.softmax(input=output)
     loss = cross_entropy_loss(y_pred=sm_output, y_actual=train_labels)
