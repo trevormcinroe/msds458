@@ -47,6 +47,8 @@ This directory contains a from-scratch implementation of:
     * week2/nn.get_gradient() + week2/optimizer.update_weights()
 * Cross entropy loss
     * week2/loss.py
+* MiniBatcher
+    * week2/batching.py
 
 
 ## Using the network
@@ -63,36 +65,67 @@ For ADAM, the generally recommended hyperparameter values are as follows:
 The `xor_problem.py` script performs the training loop and outputs a graph of the loss function 
 to ```./week2/media/xor_loss.png```
 
-The below code snippet shows the initialization of the NN class with an input vector of size 2, 
+The code snippet below shows the entirety of the training loop. Line one shows the initialization of the NN class with an input vector of size 2, 
 10 hidden units, and producing 2 outputs per example in the batch. This results in the softmax function producing a
-predicted probability for each class for each example. Finally, the NN class is given the seed 111 for 
+predicted probability for each class for each example. Finally, the NN class is given the seed 1111 for 
 reproducability.
 
-The second line initializes the ADAM optimizer with the recommended hyperparameters from above.
+The second line initializes the Adam optimizer with the recommended hyperparameters from above.
 
-The "for loop" controls the number of epochs. The .forward_pass() method of the NN class produces an output
-matrix and the .softmax() method passes that matrix through the softmax function.
+Line 3 initializes our MiniBatcher class with a batch size of 4 and a seed of 111 for
+reproducability.
 
-The next line computes the cross-entropy loss between the forward pass and the corresponding training labels.
+Lines 7-9 set up some ultilies for our training, namely a list to store our losses at each
+training step, the number of epochs we want to run, and an epoch counter that is used to 
+halt the training once the desired number of epochs is met.
 
-The following line calculates the gradient of the neural network via a backward pass (explained more in depth
-in the following section).
+The first step inside of our training loop (line 13) grabs a minibatch from our training
+data and ground-truth labels. 
 
-This gradient, along with the network's current weights, are passes to the ADAM optimizer and the weights are
-updated.
-```python
-nn = NN(input_length=2, n_hidden_units=10, n_outputs=2, seed=111)
-adam = ADAM(layer_dims=nn.layer_dims, alpha=0.01, beta_m=0.99, beta_v=0.999, epsilon=0.00001)
+Lines 17-20 are used to help reset our MiniBatcher once the epoch has finished. For specific
+details, see the class description in the `batching.py` file.
 
-for _ in range(100):
-    output = nn.forward_pass(input=train_samples)
-    sm_output = nn.softmax(input=output)
-    loss = cross_entropy_loss(y_pred=sm_output, y_actual=train_labels)
-    grad = nn.get_gradient(input=train_samples, y_pred=sm_output, y_actual=train_labels)
-    adam.update_weights(weights=nn.weights, gradient=grad)
+Line 22 computes a forward pass of the data through the nextwork, which is combined with
+line 23 which computes the softmax of that forward pass output.
+
+Line 24 calculates the Cross Entropy of the training step, which is then loaded into our
+loss history tracker at line 27.
+
+Line 25 computes the gradient of the network.
+
+Line 26 takes the network's weights and the gradient and updates the weights of the network.
+
+```python class:"lineNo"
+1   nn = NN(input_length=2, n_hidden_units=10, n_outputs=2, seed=1111)
+2   adam = ADAM(layer_dims=nn.layer_dims, alpha=0.01, beta_m=0.99, beta_v=0.999, epsilon=0.00001)
+3   mb = MiniBatcher(data=train_samples, labels=train_labels, batch_size=4, seed=111)
+4
+5   # Running our training loop for 100 epochs with the entirety of our training data at each batch
+6   # We'll also be keeping track of our loss at each step...
+7   historical_losses = list()
+8   EPOCHS = 150
+9   epoch_counter = 0
+10
+11  while epoch_counter < EPOCHS:
+12      # Grabbing a mini-batch
+13      X_mb, y_mb = mb.fetch_minibatch()
+14
+15      # Explicit check to see if we have run out of data
+16      # If so, increment the epoch and reset the MiniBatcher
+17      if np.any([isinstance(X_mb, bool), len(X_mb) == 0]):
+18          epoch_counter += 1
+19          mb.new_epoch()
+20          X_mb, y_mb = mb.fetch_minibatch()
+21
+22      output = nn.forward_pass(input=X_mb)
+23      sm_output = nn.softmax(input=output)
+24      loss = cross_entropy_loss(y_pred=sm_output, y_actual=y_mb)
+25      grad = nn.get_gradient(input=X_mb, y_pred=sm_output, y_actual=y_mb)
+26      adam.update_weights(weights=nn.weights, gradient=grad)
+27      historical_losses.append(loss)
 ```
 
-Finally, here is the loss function of the network after 100 epochs of training:
+Finally, here is the loss function of the network after 300 epochs of training:
 <p align="center">
   <img width="400" src="media/xor_loss.png">
   </a>

@@ -15,3 +15,4 @@ project
 │   │   loss.py
 |   |   optimizer.py
 |   |   xor_problem.py
+|   |   batching.py
