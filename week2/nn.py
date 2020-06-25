@@ -138,10 +138,10 @@ class NN:
 
         # gradient in layer ahead * weights in layer ahead.T * deriv of ReLU
         dx = (non_activation > 0).astype(float)
-        dL_db_0 = np.sum(np.dot(dL_dsoftmax, self.weights[1]['W'].T) * dx, axis=0, keepdims=True)
+        dL_db_0 = np.sum(np.dot(dL_dsoftmax, self.weights[1]['W'].T) * dx, axis=0, keepdims=True) / input.shape[0]
 
         # gradient in layer ahead * input data
-        dL_dW_0 = np.dot(input.T, np.dot(dL_dsoftmax, self.weights[1]['W'].T) * dx)
+        dL_dW_0 = np.dot(input.T, np.dot(dL_dsoftmax, self.weights[1]['W'].T) * dx) / input.shape[0]
 
         grad[0]['W'] = dL_dW_0
         grad[0]['b'] = dL_db_0
