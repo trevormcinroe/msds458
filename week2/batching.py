@@ -3,7 +3,8 @@ This module contains the class that handles minibatching data. Will automaticall
 epoch.
 """
 import numpy as np
-from copy import  deepcopy
+from copy import deepcopy
+
 
 class MiniBatcher:
     """A class meant to handle to batching of a given dataset
@@ -54,7 +55,10 @@ class MiniBatcher:
         # As our generator can run out we need a try/except
         try:
             idxs = self.__mb_idx__.__next__()
-            return self.data[idxs], self.labels[idxs]
+            if len(idxs) == 0:
+                return False, False
+            else:
+                return self.data[idxs], self.labels[idxs]
         except:
             return False, False
 
@@ -75,6 +79,7 @@ class MiniBatcher:
             lead_idx += self.batch_size
 
     def new_epoch(self):
-        """At the beginning of every new epoch, call this method to reset the generator. Will be different than the last."""
+        """At the beginning of every new epoch, call this method to reset the generator.
+        Will be different than the last epoch."""
         self._data_shuffle()
         self.__mb_idx__ = self._idx_yielder()
