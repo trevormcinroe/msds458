@@ -3,7 +3,7 @@
 ## Introduction
 The XOR problem is a key bit of knowledge in classic deep learning theory. "XOR" is short for "exclusive or". 
 In this context, it is an operation between two binary inputs that produces a "1" when the two inputs are different and
-a "0" if the two outputs are the same. This results in the following data:
+a "0" if the two inputs are the same. This results in the following data:
 
 | x1        | x2           | y  |
 | ------------- |:-------------:| -----:|
