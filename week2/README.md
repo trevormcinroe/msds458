@@ -112,7 +112,7 @@ Line 26 takes the network's weights and the gradient and updates the weights of 
 14
 15      # Explicit check to see if we have run out of data
 16      # If so, increment the epoch and reset the MiniBatcher
-17      if np.any([isinstance(X_mb, bool), len(X_mb) == 0]):
+17      if isinstance(X_mb, bool):
 18          epoch_counter += 1
 19          mb.new_epoch()
 20          X_mb, y_mb = mb.fetch_minibatch()
