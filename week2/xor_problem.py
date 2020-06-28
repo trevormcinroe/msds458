@@ -39,7 +39,7 @@ while epoch_counter < EPOCHS:
 
     # Explicit check to see if we have run out of data
     # If so, increment the epoch and reset the MiniBatcher
-    if np.any([isinstance(X_mb, bool), len(X_mb) == 0]):
+    if isinstance(X_mb, bool):
         epoch_counter += 1
         mb.new_epoch()
         X_mb, y_mb = mb.fetch_minibatch()
