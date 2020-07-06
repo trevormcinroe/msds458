@@ -16,3 +16,6 @@ project
 |   |   optimizer.py
 |   |   xor_problem.py
 |   |   batching.py
+└─── week3
+|   └───results
+|   | mcinroe_assignment_1.ipynb 
