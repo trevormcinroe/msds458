@@ -19,3 +19,4 @@ project
 └─── week3
 |   └───results
 |   | mcinroe_assignment_1.ipynb 
+|   | mcinroe_research_assignment_1.pdf
