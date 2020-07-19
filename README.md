@@ -20,3 +20,5 @@ project
 |   └───results
 |   | mcinroe_assignment_1.ipynb 
 |   | mcinroe_research_assignment_1.pdf
+└─── week5
+|   | weight_init_testing.ipynb
