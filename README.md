@@ -18,7 +18,8 @@ project
 |   |   batching.py
 └─── week3
 |   └───results
-|   | mcinroe_assignment_1.ipynb 
+|   | mcinroe_research_1.ipynb 
 |   | mcinroe_research_assignment_1.pdf
 └─── week5
-|   | weight_init_testing.ipynb
+|   | mcinroe_research_2.html
+|   | mcinroe_deepcnn_research_458.pdf
